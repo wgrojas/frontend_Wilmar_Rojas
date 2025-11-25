@@ -123,7 +123,7 @@ export default function FormScreen() {
       return;
     }
 
-    const { error } = await api.put(`/actualizar/${editData.id}`, editData);
+    const { error } = await api.put(`/actualizar/${editData.id_proveedor}`, editData);
 
     if (error) {
       showAlert("Error", "No se pudo actualizar.", "error");
@@ -139,13 +139,13 @@ export default function FormScreen() {
   // --------------------------------------------------
   // ELIMINAR (con confirmación)
   // --------------------------------------------------
-  const eliminarProveedor = (id: number) => {
+  const eliminarProveedor = (id_proveedor: number) => {
     showAlert(
       "Confirmar eliminación",
       "¿Estás seguro de eliminar este proveedor?",
       "warning",
       async () => {
-        const { error } = await api.delete(`/eliminar/${id}`);
+        const { error } = await api.delete(`/eliminar/${id_proveedor}`);
 
         if (error) {
           showAlert("Error", "No se pudo eliminar.", "error");
@@ -184,7 +184,7 @@ export default function FormScreen() {
             style={styles.input}
             value={telefono}
             onChangeText={setTelefono}
-            placeholder="3001234567"
+            placeholder=""
             keyboardType="phone-pad"
             placeholderTextColor="#c7c7c7"
           />
@@ -239,7 +239,7 @@ export default function FormScreen() {
           ) : (
             <FlatList
               data={proveedores}
-              keyExtractor={(item) => String(item.id)}
+              keyExtractor={(item) => String(item.id_proveedor)}
               style={{ maxHeight: 350 }}
               renderItem={({ item }) => (
                 <View style={styles.card}>
@@ -266,7 +266,7 @@ export default function FormScreen() {
 
                     <TouchableOpacity
                       style={[styles.btnAction, { backgroundColor: "#d63031" }]}
-                      onPress={() => eliminarProveedor(item.id)}
+                      onPress={() => eliminarProveedor(item.id_proveedor)}
                     >
                       <Text style={styles.btnText}>Eliminar</Text>
                     </TouchableOpacity>
@@ -296,18 +296,14 @@ export default function FormScreen() {
                     style={styles.modalInput}
                     value={editData.telefono}
                     placeholder="Teléfono"
-                    onChangeText={(t) =>
-                      setEditData({ ...editData, telefono: t })
-                    }
+                    onChangeText={(t) => setEditData({ ...editData, telefono: t })}
                     placeholderTextColor="#ccc"
                   />
                   <TextInput
                     style={styles.modalInput}
                     value={editData.direccion}
                     placeholder="Dirección"
-                    onChangeText={(t) =>
-                      setEditData({ ...editData, direccion: t })
-                    }
+                    onChangeText={(t) => setEditData({ ...editData, direccion: t })}
                     placeholderTextColor="#ccc"
                   />
                   <TextInput
@@ -344,7 +340,7 @@ export default function FormScreen() {
           show={alerta.visible}
           title={alerta.titulo}
           message={alerta.mensaje}
-          closeOnTouchOutside={true}   // ← FIX IMPORTANTE
+          closeOnTouchOutside={true}
           showConfirmButton
           confirmText="Aceptar"
           confirmButtonColor={
